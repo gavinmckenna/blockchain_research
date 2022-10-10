@@ -1,0 +1,87 @@
+// SDPX-License_Identifier: MIT
+pragma solidity ^0.8.7;
+
+contract Ownable {
+
+    address owner;
+
+     modifier onlyOwner() {
+        require(msg.sender == owner, "must be owner");
+        _;
+    }
+}
+    
+
+  //  contract Items is Ownable{
+
+    //    struct Item{
+    //        uint quantity;
+    //       string name;
+    //    }
+
+    //    mapping(Item => uint) public items;
+
+    //   constructor()
+    //}
+
+
+contract Supplier is Ownable{
+
+        struct Item{
+            uint quantity;
+            string name;
+        }
+
+        mapping(Item => uint) public items; //wrong, each item should have its own id
+
+    function getItems() public view onlyOwner returns(string memory) {
+        return getItems();
+    }
+
+    function addItem(
+        uint _quantity, 
+        string memory _name
+    ) public {
+        items[_name] = items(_name, _quantity);
+    }
+ }
+
+    contract Buyer {
+
+        enum Statuses { 
+             Available, 
+             Soldout
+          }
+
+          Statuses public currentStatus;
+
+            constructor() {
+            owner = payable(msg.sender);
+            if(Item[]>0)
+                currentStatus = Statuses.Available;
+            else
+                currentStatus = Statuses.Soldout;
+        }
+
+            modifier onlyWhileAvailable{
+            require(currentStatus == Statuses.Available, "Sold out.");
+            _;
+        }
+
+            modifier costs(uint _price) {
+            require(msg.value >= _price, "Not enough ether provided");
+            _;
+        }
+
+        function purchase() public payable onlyWhileAvailable costs(_price){
+        
+        require(msg.value >= _price, "Not enough ether provided");
+            Item[]--;
+
+        (bool sent, bytes memory data) = owner.call{value: msg.value}("");
+        require(true);
+
+        emit Occupy(msg.sender, msg.value);
+    }
+
+}
